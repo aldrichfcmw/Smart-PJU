@@ -9,8 +9,7 @@ if(isset($_POST)){
 if(isset($_GET)){
     $data=$_GET['devui'];
     $cek=query("SELECT * FROM board WHERE devui='$data'")[0];
-    echo $cek['status'];
-
+    echo "Lampu=".$cek['status']." Sensi=".$cek['sensitivitas'];
 }
 
 if($_POST['type'] == "tampil"){
