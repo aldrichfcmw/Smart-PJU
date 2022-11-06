@@ -126,22 +126,25 @@ if (!isset($_SESSION['login'])) {
               <div class="col-xl-6">
                 <div class="card">
                   <div class="card-body">
-                    <div class="row">
-                      <div class="col-1 text-center">
-                        <i class="icofont icofont-light-bulb" style="font-size: 2.5em;"></i>
-                      </div>
-                      <div class="col-8">
-                        <div class="mt-2">
-                          <h5>Lampu Site A</h5>
+                    <?php $dev=query("SELECT * FROM board");?>
+                    <?php foreach ($dev as $row) : ?>
+                      <div class="row">
+                        <div class="col-1 text-center">
+                          <i class="icofont icofont-light-bulb" style="font-size: 2.5em;"></i>
+                        </div>
+                        <div class="col-8">
+                          <div class="mt-2">
+                            <h5>Lampu <?= $row['devname'];?></h5>
+                          </div>
+                        </div>
+                        <div class="col-3 text-end">
+                          <label class="switch">
+                            <input id="" type="checkbox" data-bs-original-title="" title=""><span  class="switch-state"></span>
+                          </label>
                         </div>
                       </div>
-                      <div class="col-3 text-end">
-                        <label class="switch">
-                          <input id="bootstrap-notify-url" type="checkbox" data-bs-original-title="" title=""><span class="switch-state"></span>
-                        </label>
-                      </div>
-                    </div>
-                    <hr>
+                      <hr>
+                    <?php endforeach; ?>
                   </div>
                 </div>
                 <div class="card">

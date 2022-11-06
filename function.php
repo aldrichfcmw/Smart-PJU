@@ -2,8 +2,8 @@
 
 $title = "SMART PJU";
 
-$koneksi = mysqli_connect("localhost", "root", "", "spju");
-//$koneksi = mysqli_connect('localhost','sql_smart_pju','telkom20','sql_smart_pju');
+//$koneksi = mysqli_connect("localhost", "root", "", "spju");
+$koneksi = mysqli_connect('localhost','sql_smart_pju','telkom20','sql_smart_pju');
 
 function query($query)
 {
@@ -19,8 +19,25 @@ function query($query)
     while ($row = mysqli_fetch_assoc($result)) {
         $rows[] = $row;
     }
-
     return $rows;
+}
+
+function query_json($query_json)
+{
+    // Koneksi database
+    global $koneksi;
+
+    $result = mysqli_query($koneksi, $query_json);
+
+    // membuat varibale array
+    $rows = [];
+
+    // mengambil semua data dalam bentuk array
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    $response=json_encode($rows, JSON_PRETTY_PRINT);
+    return $response;
 }
 
 function regis($data)
@@ -127,6 +144,16 @@ function tambah_data($data)
         		echo "Error: " . $sql . "<br>" . $koneksi->error;
         }
     }
+    return mysqli_affected_rows($koneksi);
+}
+
+function ubah_status($data)
+{
+    global $koneksi;
+    $devui = $data['devui'];
+    $status = $data['status'];
+
+    mysqli_query($koneksi, "UPDATE board SET status='$status' WHERE devui='$devui'");
     return mysqli_affected_rows($koneksi);
 }
 //$path_parts = pathinfo($_SERVER['PHP_SELF']);
