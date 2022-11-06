@@ -77,7 +77,7 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
           <div class="container-fluid">
             <div class="page-header">
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6 mb-4">
                   <h3>Device Detail</h3>
                   <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -158,44 +158,29 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                   <div class="card-header bg-primary">
                     <h5 class="text-white"><?= $dev['devname'];?></h5>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-1 text-center">
-                        <i class="icofont icofont-light-bulb" style="font-size: 2.5em;"></i>
-                      </div>
-                      <div class="col-8">
-                        <div class="mt-2">
-                          <h5>Lampu</h5>
-                        </div>
-                      </div>
-                      <div class="col-3 text-end">
-                      <form method="post" id="toggleForm">
-                        <label class="switch">
-                          <input id="customSwitch1" type="checkbox" data-bs-original-title="" title=""><span  class="switch-state"></span>
-                        </label>
-                      </form>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row text-center">
-                        <div class="col-1 ">
-                          <i class="icofont icofont-sun" style="font-size: 2.5em;"></i>
-                        </div>
-                        <div class="col-7 text-start">
-                          <div class="mt-2">
-                            <h5>Sensitivitas</h5>
-                          </div>
-                        </div>
-                        <div class="col">
+                  <div class="card-body text-center">
+                    <table class="display" style="width:100%;" border="0">
+                      <tr>
+                        <th><i class="icofont icofont-light-bulb" style="font-size: 2.5em;"></i></th>
+                        <th><h5 class="mt-2">Lampu</h5></th>
+                        <th>
+                          <form method="post" id="toggleForm">
+                            <label class="switch mt-2">
+                              <input id="customSwitch1" type="checkbox" data-bs-original-title="" title=""><span  class="switch-state"></span>
+                            </label>
+                          </form>
+                        </th>
+                      </tr>
+                      <tr>
+                        <th><i class="icofont icofont-sun" style="font-size: 2.5em;"></i></th>
+                        <th><h5 class="mt-2">Sensitivitas</h5></th>
+                        <th>
                           <button class="btn-md rounded btn-primary" id="customSwitch2"><i class="icofont icofont-minus-circle" style="font-size: 1.2em;"></i></button>
-                        </div>
-                        <div class="col mt-1">
-                          <label class="" id="sensiText" for="customSwitch2"></label>
-                        </div>
-                        <div class="col">
+                          &ensp;&ensp;<label class="" id="sensiText" for="customSwitch2"></label>&ensp;&ensp;
                           <button class="btn-md rounded btn-primary" id="customSwitch3"><i class="icofont icofont-plus-circle" style="font-size: 1.2em;"></i></button>
-                        </div>
-                    </div>
+                        </th>
+                      </tr>
+                    </table>
                   </div>
                 </div>
                 <div class="card">

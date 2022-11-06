@@ -54,12 +54,6 @@ if (!isset($_SESSION['login'])) {
     <link id="color" rel="stylesheet" href="assets/css/color-1.css" media="screen">
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" />
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <style>
-      #map {
-        height: 100%;
-      }
-    </style>
   </head>
   <body>
     <!-- Loader starts-->
@@ -227,74 +221,6 @@ if (!isset($_SESSION['login'])) {
     <!-- Theme js-->
     <script src="assets/js/script.js"></script>
     <!-- login js-->
-    <!-- Plugin used-->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC48alJp8XSkKvW-FPC5hDN4Rzyv91puyw&callback=initMap&v=weekly"
-      defer
-    ></script>
-    <script>
-      let map;
-
-      function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: new google.maps.LatLng(-33.91722, 151.23064),
-          zoom: 16,
-        });
-
-        const icons = {
-          hidup: {
-            icon: "assets/images/icon/light-bulb-on.png",
-          },
-          mati: {
-            icon: "assets/images/icon/light-bulb-off.png",
-          },
-          rusak: {
-            icon: "assets/images/icon/light-bulb-err.png",
-          },
-        };
-        const features = [
-          <?php
-          $query = mysqli_query($koneksi,"SELECT * FROM board ORDER BY id ASC");
-          while ($row = $query->fetch_assoc()) {
-            $nama = $row["devname"];
-            $lat  = $row["latitude"];
-            $long = $row["longitude"];
-            $status = $row["status"];
-            if($status == 0){
-              echo 
-              "{
-                position: new google.maps.LatLng($lat,$long),
-                type: 'hidup',
-              },";
-            }elseif($status == 1){
-              echo 
-              "{
-                position: new google.maps.LatLng($lat,$long),
-                type: 'mati',
-              },";
-            }else{
-              echo 
-              "{
-                position: new google.maps.LatLng($lat,$long),
-                type: 'rusak',
-              },";
-            }
-            
-          }
-          ?> 
-        ];
-
-        // Create markers.
-        for (let i = 0; i < features.length; i++) {
-          const marker = new google.maps.Marker({
-            position: features[i].position,
-            icon: icons[features[i].type].icon,
-            map: map,
-          });
-        }
-      }
-
-      window.initMap = initMap;
-    </script>                        
+    <!-- Plugin used-->                     
   </body>
 </html>
