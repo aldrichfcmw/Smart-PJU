@@ -154,7 +154,10 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                 </div>
               </div>
               <div class="col-xl-6">
-                <div class="card">
+                <div class="card card-absolute">
+                  <div class="card-header bg-primary">
+                    <h5 class="text-white"><?= $dev['devname'];?></h5>
+                  </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-1 text-center">
@@ -162,14 +165,36 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                       </div>
                       <div class="col-8">
                         <div class="mt-2">
-                          <h5>Lampu <?= $dev['devname']; ?></h5>
+                          <h5>Lampu</h5>
                         </div>
                       </div>
                       <div class="col-3 text-end">
+                      <form method="post" id="toggleForm">
                         <label class="switch">
-                          <input id="bootstrap-notify-url" type="checkbox" data-bs-original-title="" title=""><span class="switch-state"></span>
+                          <input id="customSwitch1" type="checkbox" data-bs-original-title="" title=""><span  class="switch-state"></span>
                         </label>
+                      </form>
                       </div>
+                    </div>
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col-1 ">
+                          <i class="icofont icofont-sun" style="font-size: 2.5em;"></i>
+                        </div>
+                        <div class="col-7 text-start">
+                          <div class="mt-2">
+                            <h5>Sensitivitas</h5>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <button class="btn-md rounded btn-primary" id="customSwitch2"><i class="icofont icofont-minus-circle" style="font-size: 1.2em;"></i></button>
+                        </div>
+                        <div class="col mt-1">
+                          <label class="" id="sensiText" for="customSwitch2"></label>
+                        </div>
+                        <div class="col">
+                          <button class="btn-md rounded btn-primary" id="customSwitch3"><i class="icofont icofont-plus-circle" style="font-size: 1.2em;"></i></button>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -179,7 +204,7 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                     <span>Display a ighting points of SPJU</span>
                   </div>
                   <div class="card-body">
-                    <div class="map-js-height" id="map12"></div>
+                    <div class="" id="map12"></div>
                   </div>
                 </div>
               </div>
@@ -266,16 +291,121 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
     <script src="assets/js/datatable/datatable-extension/buttons.print.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/custom.js"></script>
 
-    <script src="assets/js/map-js/mapsjs-core.js"></script>
-    <script src="assets/js/map-js/mapsjs-service.js"></script>
-    <script src="assets/js/map-js/mapsjs-ui.js"></script>
-    <script src="assets/js/map-js/mapsjs-mapevents.js"></script>
-    <script src="assets/js/map-js/custom.js"></script>
-    
+
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="assets/js/script.js"></script>
+
     <!-- login js-->
     <!-- Plugin used-->
+    <script>
+      function putStatus() {
+        $.ajax({
+          type: "GET",
+          url: "api.php",
+          data: {
+            toggle_select: true,
+            api: "<?= $ui;?>",
+          },
+          success: function (result) {
+            //alert(result);
+            if (result == 1) {
+              $("#customSwitch1").prop("checked", true);
+            } else {
+              $("#customSwitch1").prop("checked", false);
+            }
+          },
+          error: function () {
+            alert("error");
+          },
+        });
+      }
+
+      function putSensitivitas() {
+        $.ajax({
+            type: "GET",
+            url: "api.php",
+            data: {
+                sensi_select: true,
+                api:'<?= $ui;?>',
+            },
+            success: function (result) {
+                //alert(result);
+                sensiText(result);
+            }
+        });
+      }
+
+      function sensiText(sensi_val) {
+        var sensi_str = sensi_val;
+        document.getElementById("sensiText").innerText = sensi_str;
+      }
+
+      function onToggle() {
+        $("#toggleForm :checkbox").change(function () {
+          if (this.checked) {
+            //alert("checked");
+            updateStatus(1);
+          } else {
+            //alert("NOT checked");
+            updateStatus(0);
+          }
+        });
+
+        $("#customSwitch2").click(function(e) {
+            var sensi = document.getElementById("sensiText").innerText;
+            sensi = sensi-1;
+            alert(sensi);
+            sensiText(sensi);
+            updateSensi(sensi);
+        });
+
+        $("#customSwitch3").click(function(e) {
+            var sensi = document.getElementById("sensiText").innerText;
+            sensi = sensi-1;
+            alert(sensi);
+            sensiText(sensi);
+            updateSensi(sensi);
+        });
+      }
+
+      function updateStatus(status_val) {
+        $.ajax({
+          type: "POST",
+          url: "api.php",
+          data: {
+            toggle_update: true,
+            status: status_val,
+            api: "<?= $ui;?>",
+          },
+          success: function (result) {
+            console.log(result);
+          },
+        });
+      }
+
+      function updateSensi(sensi_val) {
+        $.ajax({
+            type: "POST",
+            url: "api.php",
+            data: {
+                sensi_update: true, 
+                sensi: sensi_val,
+                api:'<?= $ui;?>'
+            },
+            success: function (result) {
+                console.log(result);
+            }
+        });
+      }
+
+      $(document).ready(function () {
+          //Called on page load:
+          putStatus();
+          putSensitivitas();
+          onToggle();
+          sensiText();
+      });
+    </script>
   </body>
 </html>

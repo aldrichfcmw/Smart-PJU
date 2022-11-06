@@ -2,8 +2,8 @@
 
 $title = "SMART PJU";
 
-//$koneksi = mysqli_connect("localhost", "root", "", "spju");
-$koneksi = mysqli_connect('localhost','sql_smart_pju','telkom20','sql_smart_pju');
+$koneksi = mysqli_connect("localhost", "root", "", "spju");
+//$koneksi = mysqli_connect('localhost','sql_smart_pju','telkom20','sql_smart_pju');
 
 function query($query)
 {
@@ -147,15 +147,6 @@ function tambah_data($data)
     return mysqli_affected_rows($koneksi);
 }
 
-function ubah_status($data)
-{
-    global $koneksi;
-    $devui = $data['devui'];
-    $status = $data['status'];
-
-    mysqli_query($koneksi, "UPDATE board SET status='$status' WHERE devui='$devui'");
-    return mysqli_affected_rows($koneksi);
-}
 //$path_parts = pathinfo($_SERVER['PHP_SELF']);
 //$url = $path_parts['filename'];
 ?>

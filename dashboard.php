@@ -46,7 +46,6 @@ if (!isset($_SESSION['login'])) {
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
     <link rel="stylesheet" type="text/css" href="assets/css/datatables.css">
     <link rel="stylesheet" type="text/css" href="assets/css/datatable-extension.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/mapsjs-ui.css" />
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css" />
@@ -55,6 +54,12 @@ if (!isset($_SESSION['login'])) {
     <link id="color" rel="stylesheet" href="assets/css/color-1.css" media="screen">
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style>
+      #map {
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
     <!-- Loader starts-->
@@ -123,37 +128,14 @@ if (!isset($_SESSION['login'])) {
                   </div>
                 </div>
               </div>
-              <div class="col-xl-6">
-                <div class="card">
-                  <div class="card-body">
-                    <?php $dev=query("SELECT * FROM board");?>
-                    <?php foreach ($dev as $row) : ?>
-                      <div class="row">
-                        <div class="col-1 text-center">
-                          <i class="icofont icofont-light-bulb" style="font-size: 2.5em;"></i>
-                        </div>
-                        <div class="col-8">
-                          <div class="mt-2">
-                            <h5>Lampu <?= $row['devname'];?></h5>
-                          </div>
-                        </div>
-                        <div class="col-3 text-end">
-                          <label class="switch">
-                            <input id="" type="checkbox" data-bs-original-title="" title=""><span  class="switch-state"></span>
-                          </label>
-                        </div>
-                      </div>
-                      <hr>
-                    <?php endforeach; ?>
-                  </div>
-                </div>
+              <div class="col-xl-6">  
                 <div class="card">
                   <div class="card-header pb-0">
                     <h5>Marker on Map</h5>
                     <span>Display a ighting points of SPJU</span>
                   </div>
                   <div class="card-body">
-                    <div class="map-js-height" id="map12"></div>
+                    <div id="map"></div>
                   </div>
                 </div>
               </div>
@@ -241,15 +223,78 @@ if (!isset($_SESSION['login'])) {
     <script src="assets/js/datatable/datatable-extension/buttons.html5.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/buttons.print.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/custom.js"></script>
-    <script src="assets/js/map-js/mapsjs-core.js"></script>
-    <script src="assets/js/map-js/mapsjs-service.js"></script>
-    <script src="assets/js/map-js/mapsjs-ui.js"></script>
-    <script src="assets/js/map-js/mapsjs-mapevents.js"></script>
-    <script src="assets/js/map-js/custom.js"></script>
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="assets/js/script.js"></script>
     <!-- login js-->
     <!-- Plugin used-->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC48alJp8XSkKvW-FPC5hDN4Rzyv91puyw&callback=initMap&v=weekly"
+      defer
+    ></script>
+    <script>
+      let map;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: new google.maps.LatLng(-33.91722, 151.23064),
+          zoom: 16,
+        });
+
+        const icons = {
+          hidup: {
+            icon: "assets/images/icon/light-bulb-on.png",
+          },
+          mati: {
+            icon: "assets/images/icon/light-bulb-off.png",
+          },
+          rusak: {
+            icon: "assets/images/icon/light-bulb-err.png",
+          },
+        };
+        const features = [
+          <?php
+          $query = mysqli_query($koneksi,"SELECT * FROM board ORDER BY id ASC");
+          while ($row = $query->fetch_assoc()) {
+            $nama = $row["devname"];
+            $lat  = $row["latitude"];
+            $long = $row["longitude"];
+            $status = $row["status"];
+            if($status == 0){
+              echo 
+              "{
+                position: new google.maps.LatLng($lat,$long),
+                type: 'hidup',
+              },";
+            }elseif($status == 1){
+              echo 
+              "{
+                position: new google.maps.LatLng($lat,$long),
+                type: 'mati',
+              },";
+            }else{
+              echo 
+              "{
+                position: new google.maps.LatLng($lat,$long),
+                type: 'rusak',
+              },";
+            }
+            
+          }
+          ?> 
+        ];
+
+        // Create markers.
+        for (let i = 0; i < features.length; i++) {
+          const marker = new google.maps.Marker({
+            position: features[i].position,
+            icon: icons[features[i].type].icon,
+            map: map,
+          });
+        }
+      }
+
+      window.initMap = initMap;
+    </script>                        
   </body>
 </html>
