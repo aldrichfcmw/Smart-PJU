@@ -347,10 +347,10 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
 
         $("#customSwitch3").click(function(e) {
             var sensi = document.getElementById("sensiText").innerText;
-            sensi = sensi+1;
+            sensi2 = sensi+1;
             //alert(sensi);
-            sensiText(sensi);
-            updateSensi(sensi);
+            sensiText(sensi2);
+            updateSensi(sensi2);
         });
       }
 
