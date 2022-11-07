@@ -340,15 +340,15 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
         $("#customSwitch2").click(function(e) {
             var sensi = document.getElementById("sensiText").innerText;
             sensi = sensi-1;
-            alert(sensi);
+            //alert(sensi);
             sensiText(sensi);
             updateSensi(sensi);
         });
 
         $("#customSwitch3").click(function(e) {
             var sensi = document.getElementById("sensiText").innerText;
-            sensi = sensi-1;
-            alert(sensi);
+            sensi = sensi+1;
+            //alert(sensi);
             sensiText(sensi);
             updateSensi(sensi);
         });

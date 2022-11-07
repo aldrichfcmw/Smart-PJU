@@ -14,8 +14,8 @@ include 'function.php';
  * that contains the map. 
  */
       #map {
-        height: 100px;
-        width: 400px;
+        height: 100%;
+        width: 100%;
       }
 
       /* 
@@ -34,7 +34,7 @@ include 'function.php';
      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
     -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC48alJp8XSkKvW-FPC5hDN4Rzyv91puyw&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_ojXo9WMH783CkC8BcYi8Kn0CZwilIg&callback=initMap&v=weekly"
       defer
     ></script>
     <script>
@@ -56,37 +56,9 @@ include 'function.php';
           rusak: {
             icon: "assets/images/icon/light-bulb-err.png",
           },
-        };
+        }; 
         const features = [
-          <?php
-          $query = mysqli_query($koneksi,"SELECT * FROM board ORDER BY id ASC");
-          while ($row = $query->fetch_assoc()) {
-            $nama = $row["devname"];
-            $lat  = $row["latitude"];
-            $long = $row["longitude"];
-            $status = $row["status"];
-            if($status == 0){
-              echo 
-              "{
-                position: new google.maps.LatLng($lat,$long),
-                type: 'hidup',
-              },";
-            }elseif($status == 1){
-              echo 
-              "{
-                position: new google.maps.LatLng($lat,$long),
-                type: 'mati',
-              },";
-            }else{
-              echo 
-              "{
-                position: new google.maps.LatLng($lat,$long),
-                type: 'rusak',
-              },";
-            }
-            
-          }
-          ?> 
+          { position: new google.maps.LatLng(-33.91747, 151.22912),  type: "info", },{ position: new google.maps.LatLng(-33.91747, 151.22912),  type: "info", },  
         ];
 
         // Create markers.
