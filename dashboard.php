@@ -224,8 +224,8 @@ if (!isset($_SESSION['login'])) {
       var map = new H.Map(document.getElementById('map'),
             defaultLayers.vector.normal.map,
             {
-                center: { lat: -7.27624, lng: 112.79295 },
-                zoom: 15,
+                center: { lat: -7.276, lng: 112.79315 },
+                zoom: 18,
                 pixelRatio: window.devicePixelRatio || 1
             }
         );
