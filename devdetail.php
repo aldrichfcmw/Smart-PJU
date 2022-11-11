@@ -414,6 +414,10 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
             },
             success: function (result) {
               json = JSON.parse(result);
+              if(json.status==2){
+                var marker = new H.map.Marker({ lat: json.latitude, lng: json.longitude },{ icon:bulb_err });
+                map.addObject(marker);
+              }
               if(json.status==1){
                 var marker = new H.map.Marker({ lat: json.latitude, lng: json.longitude },{ icon:bulb_on });
                 map.addObject(marker);

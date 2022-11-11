@@ -243,10 +243,11 @@ if (!isset($_SESSION['login'])) {
           },
           success: function (result) {
             json = JSON.parse(result);
-            console.log(result);
-            console.log(json[0].id);
             for(let i=0;i<=json.length;i++){
-              console.log(json[i].id);
+              if(json[i].status==2){
+                var marker = new H.map.Marker({ lat: json[i].latitude, lng: json[i].longitude },{ icon:bulb_err });
+                map.addObject(marker);
+              }
               if(json[i].status==1){
                 var marker = new H.map.Marker({ lat: json[i].latitude, lng: json[i].longitude },{ icon:bulb_on });
                 map.addObject(marker);
