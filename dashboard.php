@@ -46,6 +46,7 @@ if (!isset($_SESSION['login'])) {
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
     <link rel="stylesheet" type="text/css" href="assets/css/datatables.css">
     <link rel="stylesheet" type="text/css" href="assets/css/datatable-extension.css">
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css" />
@@ -126,10 +127,10 @@ if (!isset($_SESSION['login'])) {
                 <div class="card">
                   <div class="card-header pb-0">
                     <h5>Marker on Map</h5>
-                    <span>Display a ighting points of SPJU</span>
+                    <span>Display a lighting points of SPJU</span>
                   </div>
                   <div class="card-body">
-                    <div id="map"></div>
+                    <div class="map-js-height" id="map"></div>
                   </div>
                 </div>
               </div>
@@ -153,14 +154,8 @@ if (!isset($_SESSION['login'])) {
                           <?php $list=query("SELECT * FROM sensor "); $i=1;?>
                           <?php foreach ($list as $row) : ?>
                           <tr>
-                            <th>1</th>
+                            <th><?= $i++ ?></th>
                             <th>January</th>
-                            <th>200</th>
-                            <th>Rp. 120000</th>
-                          </tr>
-                          <tr>
-                            <th>2</th>
-                            <th>February</th>
                             <th>200</th>
                             <th>Rp. 120000</th>
                           </tr>
@@ -182,7 +177,7 @@ if (!isset($_SESSION['login'])) {
             <div class="row">
               <div class="col-md-6 footer-copyright">
                 <p class="mb-0">
-                  Copyright 2021-22 © viho All rights reserved.
+                  Copyright 2021-22 © SPJU All rights reserved.
                 </p>
               </div>
               <div class="col-md-6">
@@ -217,6 +212,53 @@ if (!isset($_SESSION['login'])) {
     <script src="assets/js/datatable/datatable-extension/buttons.html5.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/buttons.print.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/custom.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <script>
+      var platform = new H.service.Platform({
+            apikey: 'pHBXcIXvPkwJ0tIEVe_P-lg6YPFwaVNEg9oLWCjRoyQ'
+        });
+      var defaultLayers = platform.createDefaultLayers();;
+      var map = new H.Map(document.getElementById('map'),
+            defaultLayers.vector.normal.map,
+            {
+                center: { lat: -7.27624, lng: 112.79295 },
+                zoom: 15,
+                pixelRatio: window.devicePixelRatio || 1
+            }
+        );
+      window.addEventListener("resize", () => map.getViewPort().resize());
+      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+      var bulb_err = new H.map.Icon("assets/images/icon/light-bulb-err.png", );
+      var bulb_off = new H.map.Icon("assets/images/icon/light-bulb-off.png", );
+      var bulb_on = new H.map.Icon("assets/images/icon/light-bulb-on.png", );
+      $.ajax({
+          type: "POST",
+          url: "api.php",
+          data: {
+            marker:true,
+          },
+          success: function (result) {
+            json = JSON.parse(result);
+            console.log(result);
+            console.log(json[0].id);
+            for(let i=0;i<=json.length;i++){
+              console.log(json[i].id);
+              if(json[i].status==1){
+                var marker = new H.map.Marker({ lat: json[i].latitude, lng: json[i].longitude },{ icon:bulb_on });
+                map.addObject(marker);
+              }
+              if(json[i].status==0){
+                var marker = new H.map.Marker({ lat: json[i].latitude, lng: json[i].longitude },{ icon:bulb_off });
+                map.addObject(marker);
+              }
+            }
+          },
+      });
+    </script>
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="assets/js/script.js"></script>

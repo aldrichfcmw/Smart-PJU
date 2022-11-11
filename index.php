@@ -254,7 +254,7 @@
               </div>
               <div class="col-md-6 col-sm-10">
                 <div class="footer-contain">
-                  <p class="mb-0">Copyright 2021-22 © viho All rights reserved.                       </p>
+                  <p class="mb-0">Copyright 2021-22 © SPJU All rights reserved.                       </p>
                 </div>
               </div>
             </div>

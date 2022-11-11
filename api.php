@@ -38,4 +38,19 @@ if (isset($_POST['sensi_update'])) {
     return mysqli_affected_rows($koneksi);
 }
 
+if(isset($_POST['permarker'])){
+    $devui=$_POST['api'];
+	$query = mysqli_query($koneksi, "SELECT * FROM board WHERE devui='$devui' ORDER BY id DESC ");
+	$row = mysqli_fetch_assoc($query);
+	print json_encode($row);
+}
+
+if(isset($_POST['marker'])){
+	$data = [];
+	$query = mysqli_query($koneksi, "SELECT * FROM board ORDER BY id DESC ");
+	while($row = mysqli_fetch_object($query)){
+		$data[] = $row;
+	}
+	echo json_encode($data);
+}
 ?>

@@ -49,7 +49,7 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css">
     <link rel="stylesheet" type="text/css" href="assets/css/datatables.css">
     <link rel="stylesheet" type="text/css" href="assets/css/datatable-extension.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/mapsjs-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css" />
@@ -189,7 +189,7 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                     <span>Display a ighting points of SPJU</span>
                   </div>
                   <div class="card-body">
-                    <div class="" id="map12"></div>
+                    <div class="map-js-height" id="maps"></div>
                   </div>
                 </div>
               </div>
@@ -240,7 +240,7 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
             <div class="row">
               <div class="col-md-6 footer-copyright">
                 <p class="mb-0">
-                  Copyright 2021-22 © viho All rights reserved.
+                  Copyright 2021-22 © SPJU All rights reserved.
                 </p>
               </div>
               <div class="col-md-6">
@@ -275,8 +275,10 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
     <script src="assets/js/datatable/datatable-extension/buttons.html5.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/buttons.print.min.js"></script>
     <script src="assets/js/datatable/datatable-extension/custom.js"></script>
-
-
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="assets/js/script.js"></script>
@@ -384,12 +386,54 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
         });
       }
 
+      function maps(){
+        var platform = new H.service.Platform({
+            apikey: 'pHBXcIXvPkwJ0tIEVe_P-lg6YPFwaVNEg9oLWCjRoyQ'
+        });
+        var defaultLayers = platform.createDefaultLayers();;
+        var map = new H.Map(document.getElementById('maps'),
+              defaultLayers.vector.normal.map,
+              {
+                  center: { lat: -7.27624, lng: 112.79295 },
+                  zoom: 15,
+                  pixelRatio: window.devicePixelRatio || 1
+              }
+          );
+        window.addEventListener("resize", () => map.getViewPort().resize());
+        var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+        var ui = H.ui.UI.createDefault(map, defaultLayers);
+        var bulb_err = new H.map.Icon("assets/images/icon/light-bulb-err.png", { size: { w: 56, h: 56 } });
+        var bulb_off = new H.map.Icon("assets/images/icon/light-bulb-off.png", { size: { w: 56, h: 56 } });
+        var bulb_on = new H.map.Icon("assets/images/icon/light-bulb-on.png", { size: { w: 56, h: 56 } });
+        $.ajax({
+            type: "POST",
+            url: "api.php",
+            data: {
+              permarker:true,
+              api: '<?= $ui;?>',
+            },
+            success: function (result) {
+              json = JSON.parse(result);
+              if(json.status==1){
+                var marker = new H.map.Marker({ lat: json.latitude, lng: json.longitude },{ icon:bulb_on });
+                map.addObject(marker);
+              }
+              if(json.status==0){
+                var marker = new H.map.Marker({ lat: json.latitude, lng: json.longitude },{ icon:bulb_off });
+                map.addObject(marker);
+              }
+            },
+        });
+        map.setCenter(marker)
+      }
+
       $(document).ready(function () {
           //Called on page load:
           putStatus();
           putSensitivitas();
           onToggle();
           sensiText();
+          maps();
       });
     </script>
   </body>
