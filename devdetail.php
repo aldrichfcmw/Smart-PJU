@@ -346,17 +346,23 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
         $("#customSwitch2").click(function(e) {
             var sensi = document.getElementById("sensiText").innerText;
             sensi = sensi-1;
-            //alert(sensi);
-            sensiText(sensi);
-            updateSensi(sensi);
+            if(sensi < 0){
+              alert("Mohon maaf batas sensitivitas hanya 0-5");
+            }else{
+              sensiText(sensi);
+              updateSensi(sensi);
+            }
         });
 
         $("#customSwitch3").click(function(e) {
             var sensi = document.getElementById("sensiText").innerText;
             sensi++;
-            //alert(sensi);
-            sensiText(sensi);
-            updateSensi(sensi);
+            if(sensi > 5){
+              alert("Mohon maaf batas sensitivitas hanya 0-5");
+            }else{
+              sensiText(sensi);
+              updateSensi(sensi);
+            }
         });
       }
 
