@@ -87,17 +87,35 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                     <li class="breadcrumb-item"><a href="javascript:void(0)"><?= $dev['devname']; ?></a></li>
                   </ol>
                 </div>
-                <div class="col-sm-6" >
-                  <div class="row bg-white p-3">
+                <div class="col-sm-6">
+                  <div class="bg-white">
+                    <div class="row p-4">
+                      <table>
+                        <tr>
+                          <th><span>Name</span></th>
+                          <th><span>:</span></th>
+                          <th><span><?= $dev['devname']; ?></span></th>
+                        </tr>
+                        <tr>
+                          <th><span>API</span></th>
+                          <th><span>:</span></th>
+                          <th><span><?= $dev['devui']; ?></span></th>
+                        </tr>
+                      </table>
+                    </div>
+                    
+                  </div>
+                  
+                  <!-- <div class="row">
                     <div class="col-3">
-                      <span>Name Board </span><br>
-                      <span>API        </span>
+                      <span>Name</span><br>
+                      <span>API</span>
                     </div>
                     <div class="col-8">
                       <span>: <?= $dev['devname']; ?></span><br>
                       <span>: <?= $dev['devui']; ?></span>
-                    </div>
-                  </div>
+                    </div>                   
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -335,10 +353,8 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
       function onToggle() {
         $("#toggleForm :checkbox").change(function () {
           if (this.checked) {
-            //alert("checked");
             updateStatus(1);
           } else {
-            //alert("NOT checked");
             updateStatus(0);
           }
         });
