@@ -2,11 +2,11 @@
 
 include 'function.php';
 
-// if(isset($_POST)){
+// if (isset($_POST['data'])){
 //     tambah_data($_POST);
 // }
 
-// if(isset($_GET)){
+// if (isset($_GET['data'])) {
 //     $data=$_GET['devui'];
 //     $cek=query("SELECT * FROM board WHERE devui='$data'")[0];
 //     echo json_encode($cek, JSON_PRETTY_PRINT);;
