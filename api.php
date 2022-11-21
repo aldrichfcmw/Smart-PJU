@@ -2,15 +2,19 @@
 
 include 'function.php';
 
-// if (isset($_POST['data_post'])){
-//     tambah_data($_POST);
-// }
+if (isset($_POST['data_post'])){
+    tambah_data($_POST);
+}
 
-// if (isset($_GET['data_request'])) {
-//     $data=$_GET['devui'];
-//     $cek=query("SELECT * FROM board WHERE devui='$data'")[0];
-//     echo json_encode($cek, JSON_PRETTY_PRINT);;
-// }
+if (isset($_POST['data_post_status'])){
+    edit_data_status($_POST);
+}
+
+if (isset($_GET['data_request'])) {
+    $data=$_GET['devui'];
+    $cek=query("SELECT * FROM board WHERE devui='$data'")[0];
+    echo json_encode($cek, JSON_PRETTY_PRINT);;
+}
 
 if (isset($_GET['toggle_select'])) {
     $devui=$_GET['api'];

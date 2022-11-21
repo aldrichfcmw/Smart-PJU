@@ -147,6 +147,26 @@ function tambah_data($data)
     return mysqli_affected_rows($koneksi);
 }
 
+function edit_data_status($data)
+{
+    global $koneksi;
+
+    $status = $data['status'];
+    $devui = $data['devui'];
+    		
+    $result = mysqli_query($koneksi, "SELECT * FROM board WHERE devui='$devui'");
+    $cek = mysqli_num_rows($result);
+    if($cek > 0){
+        $sql = "UPDATE board SET status='$status' WHERE devui='$devui'";
+    	if ($koneksi->query($sql) === TRUE) {
+    		echo json_encode("Ok");
+        } else {
+        		echo "Error: " . $sql . "<br>" . $koneksi->error;
+        }
+    }
+    return mysqli_affected_rows($koneksi);
+}
+
 //$path_parts = pathinfo($_SERVER['PHP_SELF']);
 //$url = $path_parts['filename'];
 ?>
