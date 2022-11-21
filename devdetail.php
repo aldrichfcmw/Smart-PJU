@@ -320,6 +320,9 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
             //alert(result);
             if (result == 1) {
               $("#customSwitch1").prop("checked", true);
+            } else if (result == 2) {
+              $("#customSwitch1").prop("checked", false);
+              alert("PJU Terdapat Masalah");
             } else {
               $("#customSwitch1").prop("checked", false);
             }
