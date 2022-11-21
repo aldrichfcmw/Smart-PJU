@@ -357,10 +357,8 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
         $("#toggleForm :checkbox").change(function () {
           if (this.checked) {
             updateStatus(1);
-            $("#maps").load(maps());
           } else {
             updateStatus(0);
-            $("#maps").load(maps());
           }
         });
 
