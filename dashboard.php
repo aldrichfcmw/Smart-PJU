@@ -5,6 +5,10 @@ if (!isset($_SESSION['login'])) {
   header('location:login.php');
   exit;
 }
+$dev=mysqli_query($koneksi,"SELECT * FROM board");
+$jumlah_dev = mysqli_num_rows($dev);
+$kwh=query_r("SELECT SUM(energi)as energi FROM electricity WHERE EXTRACT(month FROM date) = $month");
+$biaya=query_r("SELECT SUM(biaya)as energi FROM electricity WHERE EXTRACT(month FROM date) = $month");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,8 +96,8 @@ if (!isset($_SESSION['login'])) {
                   <div class="bg-primary b-r-4 card-body">
                     <div class="media static-top-widget">
                       <div class="align-self-center text-center"><i data-feather="dollar-sign"></i></div>
-                      <div class="media-body"><span class="m-0">Earnings IDR</span>
-                        <h4 class="mb-0 counter">6659</h4><i class="icon-bg" data-feather="dollar-sign"></i>
+                      <div class="media-body"><span class="m-0">Cost IDR</span>
+                        <h4 class="mb-0 counter"><?= $biaya[0]; ?></h4><i class="icon-bg" data-feather="dollar-sign"></i>
                       </div>
                     </div>
                   </div>
@@ -105,7 +109,7 @@ if (!isset($_SESSION['login'])) {
                     <div class="media static-top-widget">
                       <div class="align-self-center text-center"><i data-feather="activity"></i></div>
                       <div class="media-body"><span class="m-0">KWh</span>
-                        <h4 class="mb-0 counter">9856</h4><i class="icon-bg" data-feather="activity"></i>
+                        <h4 class="mb-0 counter"><?= $kwh[0]; ?></h4><i class="icon-bg" data-feather="activity"></i>
                       </div>
                     </div>
                   </div>
@@ -117,7 +121,7 @@ if (!isset($_SESSION['login'])) {
                     <div class="media static-top-widget">
                       <div class="align-self-center text-center"><i data-feather="server"></i></div>
                       <div class="media-body"><span class="m-0">Dev Kit Boards</span>
-                        <h4 class="mb-0 counter">3</h4><i class="icon-bg" data-feather="server"></i>
+                        <h4 class="mb-0 counter"><?= $jumlah_dev?></h4><i class="icon-bg" data-feather="server"></i>
                       </div>
                     </div>
                   </div>
@@ -145,19 +149,19 @@ if (!isset($_SESSION['login'])) {
                         <thead>
                           <tr>
                             <th>No</th>
-                            <th>Month</th>
+                            <th>Date</th>
                             <th>KWH</th>
                             <th>RP</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <?php $list=query("SELECT * FROM sensor "); $i=1;?>
+                          <?php $list=query("SELECT * FROM electricity WHERE type='monthly' "); $i=1;?>
                           <?php foreach ($list as $row) : ?>
                           <tr>
                             <th><?= $i++ ?></th>
-                            <th>January</th>
-                            <th>200</th>
-                            <th>Rp. 120000</th>
+                            <th><?= $row['date'] ?></th>
+                            <th><?= $row['energi'] ?></th>
+                            <th><?= $row['biaya'] ?></th>
                           </tr>
                           <?php endforeach; ?>
                         </tbody>

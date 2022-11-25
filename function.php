@@ -5,6 +5,14 @@ $title = "SMART PJU";
 $koneksi = mysqli_connect("localhost", "root", "", "spju");
 //$koneksi = mysqli_connect('localhost','sql_smart_pju','telkom20','sql_smart_pju');
 
+ini_set('date.timezone', 'Asia/Jakarta');
+$now = new DateTime();
+$date_now = $now->format("Y-m-d");
+$date_end = $now->format("Y-m-t");
+$day = $now->format("d");
+$month = $now->format("m");
+$timenow = $now->format("H:i:s");
+
 function query($query)
 {
     // Koneksi database
@@ -20,6 +28,17 @@ function query($query)
         $rows[] = $row;
     }
     return $rows;
+}
+
+function query_r($query)
+{
+    // Koneksi database
+    global $koneksi;
+
+    $result = mysqli_query($koneksi, $query);
+    $row = mysqli_fetch_array($result);
+    
+    return $row;
 }
 
 function query_json($query_json)
@@ -123,21 +142,19 @@ function hapus($data)
 function tambah_data($data)
 {
     global $koneksi;
-    ini_set('date.timezone', 'Asia/Jakarta');
-    $now = new DateTime();
 
-    $datenow = $now->format("Y-m-d H:i:s");
-    
     $tegangan = $data['tegangan'];
     $arus = $data['arus'];
     $suhu = $data['suhu'];
+    $watt = $data['watt'];
+    $energi = $data['energi'];
     $cahaya = $data['cahaya'];
     $devui = $data['devui'];
     		
     $result = mysqli_query($koneksi, "SELECT * FROM board WHERE devui='$devui'");
     $cek = mysqli_num_rows($result);
     if($cek > 0){
-    	$sql = "INSERT INTO sensor(cahaya,tegangan,arus,suhu,date,devui) VALUES ('$cahaya', '$tegangan', '$arus', '$suhu', '$datenow', '$devui')";
+    	$sql = "INSERT INTO sensor(cahaya,tegangan,arus,suhu,date,time,devui) VALUES ('$cahaya', '$tegangan', '$arus', '$watt', '$energy', '$suhu', '$datenow', '$timenow', '$devui')";
     	if ($koneksi->query($sql) === TRUE) {
     		echo json_encode("Ok");
         } else {
