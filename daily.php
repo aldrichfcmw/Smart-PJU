@@ -2,9 +2,9 @@
 
     include 'function.php';
 
-    //echo $month;echo "<br>";
+    //echo "<br>";
 
-    $query="SELECT devui,SUM(energi) FROM sensor WHERE date='$date_now' GROUP BY devui";
+    $query="SELECT devui,SUM(energi)/COUNT(id)AS energi  FROM sensor WHERE date='$date_now' GROUP BY devui";
     $result = mysqli_query($koneksi,$query);
     while($row = mysqli_fetch_array($result))
     {
