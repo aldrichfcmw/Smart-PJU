@@ -249,7 +249,7 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                           </tr>
                         </thead>
                         <tbody>
-                          <?php $list=query("SELECT * FROM sensor WHERE devui='$ui' ORDER BY date DESC"); $i=1;?>
+                          <?php $list=query("SELECT * FROM sensor WHERE devui='$ui' ORDER BY date DESC,time DESC"); $i=1;?>
                           <?php foreach ($list as $row) : ?>
                           <tr>
                             <th><?= $i++ ?></th>

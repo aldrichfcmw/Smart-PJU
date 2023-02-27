@@ -11,7 +11,7 @@ $date_now = $now->format("Y-m-d");
 $date_end = $now->format("Y-m-t");
 $day = $now->format("d");
 $month = $now->format("m");
-$timenow = $now->format("H:i:s");
+$time_now = $now->format("H:i:s");
 
 function query($query)
 {
@@ -142,6 +142,11 @@ function hapus($data)
 function tambah_data($data)
 {
     global $koneksi;
+    
+    ini_set('date.timezone', 'Asia/Jakarta');
+    $now = new DateTime();
+    $datenow = $now->format("Y-m-d");
+    $timenow = $now->format("H:i:s");
 
     $arus = $data['arus'];
     $suhu = $data['suhu'];
@@ -153,12 +158,12 @@ function tambah_data($data)
     $sensi_elec=query("SELECT sensi_elec FROM board WHERE devui='$devui'")[0];
     $tegangan = $data['tegangan'] - $sensi_elec['sensi_elec'];
     $kwh=$arus*$tegangan*720/1000;
-    		    
+
     $result = mysqli_query($koneksi, "SELECT * FROM board WHERE devui='$devui'");
     $cek = mysqli_num_rows($result);
     if($cek > 0){
-    	$sql = "INSERT INTO sensor(cahaya,tegangan,arus,watt,energi,kwh,suhu,date,time,devui) VALUES ('$cahaya', '$tegangan', '$arus', '$watt', '$energy', '$kwh', '$suhu', '$datenow', '$timenow', '$devui')";
-    	if ($koneksi->query($sql) === TRUE) {
+    	$sql = "INSERT INTO sensor(cahaya,tegangan,arus,watt,energi,kwh,suhu,date,time,devui) VALUES ('$cahaya', '$tegangan', '$arus', '$watt', '$energi', '$kwh', '$suhu', '$datenow', '$timenow', '$devui')";
+        if ($koneksi->query($sql) === TRUE) {
     		echo json_encode("Ok");
         } else {
         		echo "Error: " . $sql . "<br>" . $koneksi->error;
