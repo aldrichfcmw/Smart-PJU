@@ -189,17 +189,30 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                           </form>
                         </th>
                       </tr>
-                      <tr>
+                      <tr height="55px">
                         <th><i class="icofont icofont-sun" style="font-size: 2.5em;"></i></th>
                         <th><h5 class="mt-2">Sensitivitas</h5></th>
                         <th>
-                          <button class="btn-md rounded btn-primary" id="customSwitch2"><i class="icofont icofont-minus-circle" style="font-size: 1.2em;"></i></button>  
+                          <button class="btn-md rounded btn-primary" id="minusBtnLux"><i class="icofont icofont-minus-circle" style="font-size: 1.2em;"></i></button>  
                         </th>
                         <th width="30px">
-                          <label class="ml-3" id="sensiText" for="customSwitch2"></label>
+                          <label class="ml-3" id="sensiLux" ></label>
                         </th>
                         <th>
-                          <button class="btn-md rounded btn-primary" id="customSwitch3"><i class="icofont icofont-plus-circle" style="font-size: 1.2em;"></i></button>
+                          <button class="btn-md rounded btn-primary" id="plusBtnLux"><i class="icofont icofont-plus-circle" style="font-size: 1.2em;"></i></button>
+                        </th>
+                      </tr>
+                      <tr height="55px">
+                        <th><i class="icofont icofont-flash" style="font-size: 2.5em;"></i></th>
+                        <th><h5 class="mt-2">Sensitivitas</h5></th>
+                        <th>
+                          <button class="btn-md rounded btn-primary" id="minusBtnElec"><i class="icofont icofont-minus-circle" style="font-size: 1.2em;"></i></button>  
+                        </th>
+                        <th width="30px">
+                          <label class="ml-3" id="sensiElec"></label>
+                        </th>
+                        <th>
+                          <button class="btn-md rounded btn-primary" id="plusBtnElec"><i class="icofont icofont-plus-circle" style="font-size: 1.2em;"></i></button>
                         </th>
                       </tr>
                     </table>
@@ -229,9 +242,10 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                             <th>Date</th>
                             <th>Time</th>
                             <th>Cahaya</th>
+                            <th>Suhu</th>
                             <th>Tegangan</th>
                             <th>Arus</th>
-                            <th>Suhu</th>
+                            <th>kWh</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -242,9 +256,10 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
                             <th><?= $row['date']; ?></th>
                             <th><?= $row['time']; ?></th>
                             <th><?= $row['cahaya']; ?></th>
+                            <th><?= $row['suhu']; ?></th>
                             <th><?= $row['tegangan']; ?></th>
                             <th><?= $row['arus']; ?></th>
-                            <th><?= $row['suhu']; ?></th>
+                            <th><?= $row['kwh']; ?></th>
                           </tr>
                           <?php endforeach; ?>
                         </tbody>
@@ -335,24 +350,44 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
         });
       }
 
-      function putSensitivitas() {
+      function putSensiLux() {
         $.ajax({
             type: "GET",
             url: "api.php",
             data: {
-                sensi_select: true,
+                sensi_lux: true,
                 api:'<?= $ui;?>',
             },
             success: function (result) {
                 //alert(result);
-                sensiText(result);
+                sensiLux(result);
             }
         });
       }
 
-      function sensiText(sensi_val) {
+      function putSensiElec() {
+        $.ajax({
+            type: "GET",
+            url: "api.php",
+            data: {
+                sensi_elec: true,
+                api:'<?= $ui;?>',
+            },
+            success: function (result) {
+                //alert(result);
+                sensiElec(result);
+            }
+        });
+      }
+
+      function sensiLux(sensi_val) {
         var sensi_str = sensi_val;
-        document.getElementById("sensiText").innerText = sensi_str;
+        document.getElementById("sensiLux").innerText = sensi_str;
+      }
+
+      function sensiElec(sensi_val) {
+        var sensi_str = sensi_val;
+        document.getElementById("sensiElec").innerText = sensi_str;
       }
 
       function onToggle() {
@@ -364,25 +399,47 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
           }
         });
 
-        $("#customSwitch2").click(function(e) {
-            var sensi = document.getElementById("sensiText").innerText;
-            sensi = sensi-1;
-            if(sensi < 0){
+        $("#minusBtnLux").click(function(e) {
+            var sensi_lux = document.getElementById("sensiLux").innerText;
+            sensi_lux = sensi_lux-1;
+            if(sensi_lux < 0){
               alert("Mohon maaf batas sensitivitas hanya 0-5");
             }else{
-              sensiText(sensi);
-              updateSensi(sensi);
+              sensiLux(sensi_lux);
+              updateSensiLux(sensi_lux);
             }
         });
 
-        $("#customSwitch3").click(function(e) {
-            var sensi = document.getElementById("sensiText").innerText;
-            sensi++;
-            if(sensi > 5){
+        $("#plusBtnLux").click(function(e) {
+            var sensi_lux = document.getElementById("sensiLux").innerText;
+            sensi_lux++;
+            if(sensi_lux > 5){
               alert("Mohon maaf batas sensitivitas hanya 0-5");
             }else{
-              sensiText(sensi);
-              updateSensi(sensi);
+              sensiLux(sensi_lux);
+              updateSensiLux(sensi_lux);
+            }
+        });
+
+        $("#minusBtnElec").click(function(e) {
+            var sensi_elec = document.getElementById("sensiElec").innerText;
+            sensi_elec = sensi_elec-1;
+            if(sensi_elec < 0){
+              alert("Mohon maaf batas sensitivitas hanya 0-30");
+            }else{
+              sensiElec(sensi_elec);
+              updateSensiElec(sensi_elec);
+            }
+        });
+
+        $("#plusBtnElec").click(function(e) {
+            var sensi_elec = document.getElementById("sensiElec").innerText;
+            sensi_elec++;
+            if(sensi_elec > 30){
+              alert("Mohon maaf batas sensitivitas hanya 0-30");
+            }else{
+              sensiElec(sensi_elec);
+              updateSensiElec(sensi_elec);
             }
         });
       }
@@ -402,12 +459,27 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
         });
       }
 
-      function updateSensi(sensi_val) {
+      function updateSensiLux(sensi_val) {
         $.ajax({
             type: "POST",
             url: "api.php",
             data: {
-                sensi_update: true, 
+                sensi_up_lux: true, 
+                sensi: sensi_val,
+                api:'<?= $ui;?>'
+            },
+            success: function (result) {
+                console.log(result);
+            }
+        });
+      }
+
+      function updateSensiElec(sensi_val) {
+        $.ajax({
+            type: "POST",
+            url: "api.php",
+            data: {
+                sensi_up_elec: true, 
                 sensi: sensi_val,
                 api:'<?= $ui;?>'
             },
@@ -465,9 +537,11 @@ $dev=query("SELECT * FROM board WHERE devui='$ui'")[0];
       $(document).ready(function () {
           //Called on page load:
           putStatus();
-          putSensitivitas();
+          putSensiLux();
+          putSensiElec();
           onToggle();
-          sensiText();
+          sensiLux();
+          sensiElec();
           maps();
       });
     </script>

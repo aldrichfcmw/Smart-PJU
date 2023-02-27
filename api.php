@@ -29,16 +29,29 @@ if (isset($_POST['toggle_update'])) {
     return mysqli_affected_rows($koneksi);
 }
 
-if (isset($_GET['sensi_select'])) {
+if (isset($_GET['sensi_lux'])) {
     $devui=$_GET['api'];
-    $cek=query("SELECT sensitivitas FROM board WHERE devui='$devui'")[0];
-    echo $status = $cek['sensitivitas'];
+    $cek=query("SELECT sensi_lux FROM board WHERE devui='$devui'")[0];
+    echo $status = $cek['sensi_lux'];
 }
 
-if (isset($_POST['sensi_update'])) {
+if (isset($_POST['sensi_up_lux'])) {
     $devui=$_POST['api'];
     $sensi=$_POST['sensi'];
-    mysqli_query($koneksi, "UPDATE board SET sensitivitas='$sensi' WHERE devui='$devui'");
+    mysqli_query($koneksi, "UPDATE board SET sensi_lux='$sensi' WHERE devui='$devui'");
+    return mysqli_affected_rows($koneksi);
+}
+
+if (isset($_GET['sensi_elec'])) {
+    $devui=$_GET['api'];
+    $cek=query("SELECT sensi_elec FROM board WHERE devui='$devui'")[0];
+    echo $status = $cek['sensi_elec'];
+}
+
+if (isset($_POST['sensi_up_elec'])) {
+    $devui=$_POST['api'];
+    $sensi=$_POST['sensi'];
+    mysqli_query($koneksi, "UPDATE board SET sensi_elec='$sensi' WHERE devui='$devui'");
     return mysqli_affected_rows($koneksi);
 }
 

@@ -143,18 +143,21 @@ function tambah_data($data)
 {
     global $koneksi;
 
-    $tegangan = $data['tegangan'];
     $arus = $data['arus'];
     $suhu = $data['suhu'];
     $watt = $data['watt'];
     $energi = $data['energi'];
     $cahaya = $data['cahaya'];
     $devui = $data['devui'];
-    		
+
+    $sensi_elec=query("SELECT sensi_elec FROM board WHERE devui='$devui'")[0];
+    $tegangan = $data['tegangan'] - $sensi_elec['sensi_elec'];
+    $kwh=$arus*$tegangan*720/1000;
+    		    
     $result = mysqli_query($koneksi, "SELECT * FROM board WHERE devui='$devui'");
     $cek = mysqli_num_rows($result);
     if($cek > 0){
-    	$sql = "INSERT INTO sensor(cahaya,tegangan,arus,suhu,date,time,devui) VALUES ('$cahaya', '$tegangan', '$arus', '$watt', '$energy', '$suhu', '$datenow', '$timenow', '$devui')";
+    	$sql = "INSERT INTO sensor(cahaya,tegangan,arus,watt,energi,kwh,suhu,date,time,devui) VALUES ('$cahaya', '$tegangan', '$arus', '$watt', '$energy', '$kwh', '$suhu', '$datenow', '$timenow', '$devui')";
     	if ($koneksi->query($sql) === TRUE) {
     		echo json_encode("Ok");
         } else {
